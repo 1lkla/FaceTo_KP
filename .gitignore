@@ -1,0 +1,13 @@
+.env
+venv/
+app/venv/
+data/db/
+__pycache__/
+app/ExamMasterAndroid/
+data/questions/raw/
+data/questions/done.txt
+data/questions/chunks.jsonl
+data/questions/validated.jsonl
+data/questions/validate_report.json
+app/database.db
+app/server.log

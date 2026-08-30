@@ -1,0 +1,10 @@
+services:
+  exam-master:
+    build: .
+    container_name: exam-master
+    ports:
+      - "32220:32220"
+    volumes:
+      # SQLite database is stored at /data/database.db inside the container
+      - ./data/db:/data
+    restart: unless-stopped

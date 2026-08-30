@@ -1,0 +1,13 @@
+# Local dev artifacts
+app/venv/
+app/database.db
+app/server.log
+app/__pycache__/
+app/tools/__pycache__/
+**/.DS_Store
+
+# Host-side data (mounted as volumes instead)
+data/
+
+# Android client & APKs are not needed for the web deployment
+app/ExamMasterAndroid/
