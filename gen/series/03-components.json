@@ -1,0 +1,28 @@
+{
+  "series_id": "components",
+  "title": "组件与中间件漏洞",
+  "chapter_prefix": "专题3-组件与中间件漏洞",
+  "description": "高频组件漏洞专题：从漏洞原理、利用条件、版本边界到检测与修复，覆盖面试常考组件。",
+  "topics": [
+    {"id": "log4j-jndi", "name": "Log4j2 与 JNDI 注入", "count": 14,
+     "brief": "JNDI 注入原理（lookup、RMI/LDAP 加载远程类）、Log4Shell（CVE-2021-44228）触发点（lookup 功能、${jndi:}）、嵌套绕过 WAF 的变形、影响版本边界与修复版本、JNDI 高版本 JDK 限制与绕过思路、${lower/${upper} 混淆、同类 JNDI 注入点（Fastjson、Druid、其他日志框架）、临时缓解（格式化消息 off、waf）与根治。"},
+    {"id": "fastjson", "name": "Fastjson 反序列化", "count": 13,
+     "brief": "autoType 机制与为什么危险（@type 指定类、setter/getter 触发）、与 Jackson 反序列化的区别（字段触发点）、历史绕过线（1.2.24、1.2.47 缓存绕过、1.2.68 safeMode、expectClass）、常见利用 Gadget（JdbcRowSetImpl、TemplatesImpl）、判断版本与探测手法（dnslog 探测）、safeMode 与升级策略。"},
+    {"id": "shiro", "name": "Shiro 漏洞", "count": 12,
+     "brief": "rememberMe 反序列化（AES 硬编码 key、shiro-550 原理、无 key 时爆破 key 的思路与工具）、shiro-721 Padding Oracle、权限绕过（/admin/、/;/、URL 规范化差异）、Shiro 与 CommonsBeanutils 依赖关系（无 CC 依赖时链的选择）、检测（rememberMe=deleteMe 特征）与修复。"},
+    {"id": "struts2", "name": "Struts2 漏洞", "count": 10,
+     "brief": "OGNL 表达式在 Struts2 中的位置与被滥用史、S2-045/S2-046（Content-Type 触发、报错回显）、S2-016/S2-057、devMode 漏洞、为什么 Struts2 漏洞高发（表达式执行贯穿架构）、修复与迁移建议（升级 vs 换框架）。"},
+    {"id": "spring-family", "name": "Spring 家族漏洞", "count": 12,
+     "brief": "Spring4Shell（CVE-2022-22965，参数绑定到 ClassLoader、利用条件 JDK9+ Tomcat war）、SpEL 注入场景、Spring Boot Actuator 未授权泄露与堆内存 dump 打取信息、Spring Cloud Gateway SpEL（CVE-2022-22947）、Eureka/配置端点滥用、Spring Security 路径匹配绕过（CVE-2022-22978 等）。"},
+    {"id": "weblogic", "name": "WebLogic 漏洞", "count": 10,
+     "brief": "T3/IIOP 协议反序列化（黑色工具利用面、filter 配置缓解）、XMLDecoder 反序列化系列（wls-wsat、CVE-2017-10271）、CVE-2020-14882/14883 权限绕过+RCE 组合拳、IIOP 与 JRMP、WebLogic 修复策略（补丁季度制、IPS 缓解）。"},
+    {"id": "tomcat-ajp", "name": "Tomcat 与 Apache 相关漏洞", "count": 10,
+     "brief": "Ghostcat AJP（CVE-2020-1938，8009 端口、文件读取/包含）、PUT 方法写文件（readonly 配置）、Session 反序列化（PersistentManager FileStore）、样例应用（manager 弱口令部署 war、examples）、远程代码执行 CVE-2025-24813（PUT 部分 PUT 会话反序列化）、Nginx alias 路径穿越/off-by-slash、解析漏洞（php 相关 .xxx）。"},
+    {"id": "redis-db", "name": "Redis 与数据库未授权利用", "count": 12,
+     "brief": "Redis 未授权访问→RCE 的多条路径（写 SSH key、写计划任务、主从复制 RCE 模块加载、写 webshell）各自前提条件、6.x 后 RCE 路径收紧、bind/protected-mode/requirepass 基线、Redis 的其他利用（缓存投毒）、MySQL secure_file_priv 与 UDF、MSSQL xp_cmdshell、PostgreSQL COPY PROGRAM。"},
+    {"id": "common-cve", "name": "常见应用漏洞（Jenkins/GitLab/Confluence 等）", "count": 10,
+     "brief": "Jenkins 未授权（脚本控制台、Groovy RCE、CLI 反序列化）、GitLab 任意文件读取/RCE 历史洞、Confluence OGNL（CVE-2022-26134）、Nacos 认证绕过、Harbor/Nexus 等。考利用条件、影响版本、指纹识别与批量验证思路（授权场景）。"},
+    {"id": "vuln-mgmt", "name": "组件漏洞管理与应急", "count": 10,
+     "brief": "如何摸清资产组件版本（指纹、流量、构建产物 SBOM、依赖树）、高危漏洞爆出后的响应流程（确认资产→评估可达性→临时缓解→升级回归）、WAF 规则编写要点与局限、虚拟补丁、灰度升级与兼容性风险、如何度量修复完成度。"}
+  ]
+}

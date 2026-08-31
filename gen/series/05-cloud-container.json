@@ -1,0 +1,18 @@
+{
+  "series_id": "cloud-container",
+  "title": "云与容器安全",
+  "chapter_prefix": "专题5-云与容器安全",
+  "description": "云原生安全攻防：Docker/K8s、云元数据与凭证泄露、云上横向与安全基线。",
+  "topics": [
+    {"id": "docker-escape", "name": "Docker 安全与逃逸", "count": 13,
+     "brief": "容器隔离边界（namespace/cgroup/能力集）、常见逃逸路径（特权容器 --privileged、挂载 docker.sock、危险 CAP（SYS_ADMIN/CAP_DAC_READ_SEARCH）、挂载宿主敏感路径（/、/proc、ssh key）、内核漏洞（DirtyCow/CVE-2022-0185 类）、runtime 漏洞（runc CVE-2019-5736）、镜像风险（基础镜像漏洞、敏感信息打入镜像、镜像仓库投毒）、容器内信息收集（判断在容器内、找宿主信息）。"},
+    {"id": "k8s-attack-defense", "name": "Kubernetes 攻防", "count": 14,
+     "brief": "K8s 攻击面（API Server 6443、etcd 2379、kubelet 10250、dashboard）、ServiceAccount token 滥用（挂载的 token、RBAC 权限枚举）、创建恶意 Pod/挂载宿主根路径逃逸、etcd 未授权、kubectl proxy 与匿名访问、RBAC 设计错误（cluster-admin 泛授权）、Pod 安全准入（privileged 收敛）、网络策略默认全通问题、secret 管理与 etcd 加密。"},
+    {"id": "cloud-metadata-ssrf", "name": "云元数据与 SSRF 打云", "count": 12,
+     "brief": "元数据服务原理（169.254.169.254、各云差异）、通过 SSRF 获取临时凭证后怎么用（AK/SK/StsToken 利用与工具）、IMDSv2 的防御改进（PUT + token 头）与对利用的影响、GCP/阿里云/Azure 元数据差异、元数据泄露的其他敏感项（user-data 里的密码、hostname、SSH key）、云函数/容器环境的元数据利用、防御（IMDSv2、跳板、元数据访问限制、SSRF 修复）。"},
+    {"id": "cloud-credential-lateral", "name": "云凭证泄露与云上横向", "count": 10,
+     "brief": "AK/SK 常见泄露渠道（代码仓库、前端打包、日志、错误信息、公开 Bucket）、云凭证权限评估（枚举可用权限但不越权探测的合规边界）、临时凭证与角色扮演（AssumeRole）的横向价值、云上横向典型路径（同 VPC 主机、对象存储遍历、控制台接管）、凭证泄露的止血流程（吊销轮换、审计 CloudTrail/ActionTrail 回溯影响面）。"},
+    {"id": "cloud-baseline-detection", "name": "云原生安全基线与检测", "count": 10,
+     "brief": "CIS 基线思路（容器/K8s/云账号）、镜像安全（扫描、最小化基础镜像 distroless、构建时签名与准入校验 admission）、运行时检测（行为基线、异常进程/网络告警、Falco 类工具原理）、云安全态势管理（配置漂移、公开存储桶、公网暴露面治理）、多账号治理（堡垒账号、最小权限、审计日志集中化）。"}
+  ]
+}

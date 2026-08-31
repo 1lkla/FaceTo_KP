@@ -24,3 +24,14 @@ data/questions/apply_review_report.json
 data/questions/review_in_*.jsonl
 data/questions/review_out_*.jsonl
 data/questions/review_done_*.txt
+# 专题系列管线中间产物
+data/questions/raw_series/
+data/questions/series_validated.jsonl
+data/questions/series_review_out.jsonl
+data/questions/series_review_done.txt
+data/questions/merge_report_series.json
+data/questions/validated_v2_bypass.jsonl
+data/questions/validated_v2_just0rg.jsonl
+data/questions/validated_v2_small.jsonl
+data/questions/validated_v2_vvmdx.jsonl
+data/questions/validated_v1_raw.bak.jsonl

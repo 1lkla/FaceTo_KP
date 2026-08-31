@@ -1,0 +1,20 @@
+{
+  "series_id": "ir-forensics",
+  "title": "应急响应与溯源分析",
+  "chapter_prefix": "专题6-应急响应与溯源",
+  "description": "蓝队应急响应实战：主机排查、Webshell 与内存马排查、日志与流量溯源、勒索挖矿处置、应急流程与报告。",
+  "topics": [
+    {"id": "linux-ir", "name": "Linux 应急排查", "count": 12,
+     "brief": "系统化排查顺序（进程/网络/启动项/账户/计划任务/历史命令/文件时间线）、可疑进程分析（挖矿特征、CPU 异常、隐藏进程、/proc 排查、恶意进程守护复活）、持久化点位清单（crontab、systemd、rc.local、ld.so.preload、SSH 公钥、别名、动态库劫持）、rootkit 初步排查（rkhunter、对比 chattr、busybox）、文件被删除但进程占用（lsof 恢复思路）、应急后的加固闭环。"},
+    {"id": "windows-ir", "name": "Windows 应急排查", "count": 13,
+     "brief": "排查工具链（Sysinternals：Process Explorer/Autoruns/TCPView）、关键事件日志 ID（4624/4625 登录、4720 建户、7045 服务安装、1102 清日志）与登录类型含义（10 RDP、3 网络）、注册表持久化点位（Run/RunOnce、服务、WMI 订阅、计划任务）、域内应急关注点（黄金票据迹象、异常 DCSync 4662）、勒索软件早期处置（断网、样本留存、加密范围确认）、基于时间的线还原（USNJournal、Prefetch、Amcache）。"},
+    {"id": "webshell-hunting", "name": "Webshell 与内存马排查", "count": 10,
+     "brief": "静态查杀局限与变形对抗、基于时间的排查（ compare 部署基线、找新增/修改文件）、行为特征（中间件访问日志中的异常 URL、post 大流量、低频访问管理页）、内存马在 Java 应用的排查思路（对比磁盘类、Arthas 查看 Filter/Servlet 链）、D 盾/河马/云查结合、确认后处置（删马还要查入口漏洞、查持久化与横向）、误报研判。"},
+    {"id": "log-traffic-forensics", "name": "日志与流量分析溯源", "count": 12,
+     "brief": "Web 日志分析（定位攻击 IP、payload 特征、时间线还原、常见编码解码）、中间件与系统日志关联、攻击链还原方法（入口→提权→横向→持久化→外带各阶段证据）、流量分析（HTTP 明文载荷、DNS 隧道识别、ICMP 外带、TLS 指纹 JA3 意义）、IOC 提取与情报碰撞、溯源到人的边界与合规（IP 代理、肉鸡跳板的现实限制）、报告写作要点（时间线、影响面、根因、修复建议）。"},
+    {"id": "ransomware-miner", "name": "勒索与挖矿处置", "count": 10,
+     "brief": "挖矿木马处置流程（定位矿池连接、杀进程防复活、清持久化、修补入口）、常见挖矿入口（弱口令 Redis、shiro、未修补组件）、勒索事件分级响应（隔离、备份验证、是否支付的现实考量与法律风险、样本与勒索信留存）、勒索家族识别（扩展名、勒索信特征、ID Ransomware）、解密可能性评估（NoMoreRansom、已知缺陷密钥）、预防（备份 3-2-1、最小权限、暴露面收敛）。"},
+    {"id": "ir-process", "name": "应急响应流程与协同", "count": 8,
+     "brief": "应急响应方法论（PDCERF：准备-检测-遏制-根除-恢复-跟踪）、事件分级分类与升级机制、取证意识（先保全后处置、镜像、hash 链）、与开发/运维/管理层的协同沟通、复盘与根因分析（5Why）、常见应急演练（红蓝对抗、桌面推演）、SLA 与 MTTR 度量。"}
+  ]
+}

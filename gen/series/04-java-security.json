@@ -1,0 +1,30 @@
+{
+  "series_id": "java-security",
+  "title": "Java 安全",
+  "chapter_prefix": "专题4-Java安全",
+  "description": "Java 安全深入：反序列化利用链、JNDI、表达式注入、类加载与内存马、代码审计与 JDK 防御机制演进。",
+  "topics": [
+    {"id": "deser-basics", "name": "Java 反序列化基础", "count": 13,
+     "brief": "Java 序列化机制（ObjectInputStream、serialVersionUID）、为什么反序列化危险（readObject 钩子、触发链思想）、URLDNS 链（不依赖第三方库、探测 DNS、原理 HashMap/URL hashCode 缓存）、JDK7u21 原生链（AnnotationInvocationHandler、动态代理）、payload 构造与流量特征（aced0005 魔数）、哪些接口入口常见（HTTP 参数、RMI、JMX、缓存中间件）。"},
+    {"id": "cc-chains", "name": "CommonsCollections 与常见 Gadget 链", "count": 14,
+     "brief": "CC1-CC7 链的核心区别（LazyMap vs TransformedMap、InvokerTransformer 链、TiedMapEntry、触发入口差异）、JDK 版本对 CC 链的影响（AnnotationInvocationHandler 在 JDK8u71 前后）、CommonsBeanutils 链（无 CC 依赖场景）、CB/Shiro 环境下的链改造、TemplatesImpl 字节码加载、短路用法、ysoserial 的设计思路、防御（白名单反序列化过滤器、JEP 290、序列化数据完整性校验）。"},
+    {"id": "jndi-injection", "name": "JNDI 注入与高版本绕过", "count": 13,
+     "brief": "JNDI 动态协议切换、RMI 引用加载（trustURLCodebase、JDK 8u121 边界）、LDAP 远程工厂（8u191 边界）、高版本绕过三路（本地 ClassPath 工厂类利用如 BeanFactory+EL/Tomcat、LDAP 反序列化打本地 Gadget、反序列化本身）、JEP 290 与 JNDI 的关系、常见 JNDI 注入触发点（InitialContext.lookup 参数可控、日志、数据库 JNDI 配置）。"},
+    {"id": "expression-injection", "name": "表达式与模板注入（Java 方向）", "count": 12,
+     "brief": "SpEL 注入（触发场景：参数化注解、Redis 缓存 key、Cloud 功能点）、OGNL 在 Struts2/MyBatis(ognl?) 中的位置、EL 注入（JSP EL、Tomcat BeanFactory 组合）、Groovy 脚本注入、Velocity/Freemarker SSTI 的差异与常用 payload、MVEL/JEXL 等、修复（表达式求值沙箱、SimpleEvaluationContext vs StandardEvaluationContext）。"},
+    {"id": "classloader-bytecode", "name": "类加载与字节码技术", "count": 10,
+     "brief": "双亲委派机制及其安全意义、defineClass 与任意类定义、ClassLoader.isolated 绕过（如 BCEL ClassLoader 在 Tomcat 中的利用价值）、ASM/Javassist 字节码操作在攻防两面的应用（RASP、监控、攻击载荷）、类初始化时机（static 块触发）、热部署与重载类（redefine）。"},
+    {"id": "javaagent-memshell", "name": "JavaAgent 与内存马", "count": 13,
+     "brief": "内存马分类与原理（Filter/Servlet/Listener/Interceptor/Agent 型）、为什么内存马无文件可查、注入途径（反序列化、JNDI、表达式、文件上传+Loading）、JavaAgent 与 Instrumentation（ClassFileTransformer 改字节码）、检测思路（对比磁盘 class 与内存 class、Arthas/scdump 分析、Filter 链审查）、查杀与加固（RASP、启动类校验）。"},
+    {"id": "code-audit", "name": "Java 代码审计方法论", "count": 12,
+     "brief": "审计思路（从路由到 Controller 到 sink、污点分析思想）、常见危险 sink 清单（Runtime.exec、ProcessBuilder、ObjectInputStream.readObject、ScriptEngine、XML 解析器、JDBC URL、XXE 解析器各自安全配置）、SSRF 审计点（HttpURLConnection、OkHttp、RestTemplate、HttpClient 差异）、文件上传审计（路径拼接、类型校验绕过）、依赖库漏洞审计（mvn dependency:tree）、审计工具（CodeQL/FindSecBugs/IDEA 插件）与人工结合。"},
+    {"id": "jdk-defense", "name": "JDK 防御机制演进", "count": 8,
+     "brief": "JEP 290 反序列化过滤器（原理、局限：只保护内建反序列化入口、Web 层入口不生效）、JEP 415 上下文特定过滤器、模块化系统对反射/攻击面的影响、SecurityManager 的废弃、高版本 JDK 对 JNDI/RMI 的默认收紧、升级 JDK 作为修复手段的实际价值与兼容风险。"},
+    {"id": "xxe-ssrf-java", "name": "XXE 与 SSRF 在 Java 中的利用与修复", "count": 10,
+     "brief": "Java 常见 XML 解析器（DOM/SAX/JDOM/DOM4j/StAX/Unmarshaller）各自默认是否解析外部实体、XXE 利用（文件读取、netdoc、FTP 外带、jar 协议）、各解析器安全配置写法、Java SSRF 与 PHP 的差异（常见支持协议 file/ftp/http/https/jar/ldap、少 shell 场景）、jar 协议在信息收集上的价值、防御（协议白名单、DNS 解析后校验 IP）。"},
+    {"id": "java-crypto-misuse", "name": "Java 密码学常见误用", "count": 8,
+     "brief": "new Random() 用于安全场景的问题（SecureRandom 替代、种子熵）、ECB 模式风险与识别（相同明文块相同密文）、GCM nonce 复用灾难、DES/3DES 弃用、密码哈希（PBKDF2/bcrypt/argon2 的 Java 实践）、密钥硬编码与 KeyStore 管理、AES-CBC 无 MAC 的填充预言风险。"},
+    {"id": "jsp-webshell-detect", "name": "JSP Webshell 与检测对抗（防守视角）", "count": 10,
+     "brief": "从防守视角讲：JSP 一句话/内存马的静态特征局限、变形手法概览（反射、ClassLoader、BCEL、JSPX）为何给检测带来难度、检测体系如何应对（语法 AST 分析、运行时 RASP 调用链、文件完整性基线、流量侧行为分析）、误报与漏报的权衡、清理流程（找到后还要排查持久化与内存马）。"}
+  ]
+}

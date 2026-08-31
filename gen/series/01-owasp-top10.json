@@ -1,0 +1,28 @@
+{
+  "series_id": "owasp-top10",
+  "title": "OWASP Top 10 基础",
+  "chapter_prefix": "专题1-OWASP Top 10",
+  "description": "以 OWASP Top 10 (2021) 为纲，逐类深入：原理、利用条件、检测、防御，以及面试常见陷阱。",
+  "topics": [
+    {"id": "a01-access-control", "name": "A01 失效的访问控制", "count": 15,
+     "brief": "水平/垂直越权、IDOR、JWT 中的权限信息被篡改、基于前端隐藏的伪权限控制、CORS 配置错误、目录遍历与访问控制的区别、REST 接口方法级越权（改 HTTP 方法/参数）、管理员接口未鉴权、批量遍历 ID。重点考：如何测越权、如何系统性防御（服务端强制鉴权、默认拒绝）。"},
+    {"id": "a02-crypto-failures", "name": "A02 加密机制失效", "count": 14,
+     "brief": "明文传输、弱哈希（MD5/SHA1 存密码）、盐的作用与正确用法、AES 模式选择（ECB 风险、GCM nonce 复用）、密钥硬编码、随机数不安全（Math.random/时间种子）、TLS 配置错误（降级、自签名、证书校验关闭）、HTTPS 混用、密码学误用 vs 加密算法本身被破解。"},
+    {"id": "a03-injection", "name": "A03 注入", "count": 15,
+     "brief": "SQL 注入深入：预编译为什么能防注入、预编译失效场景（order by/表名拼接、like 拼接）、二次注入、堆叠注入、注释与闭合变形。命令注入与拼接符。SSTI 模板注入。NoSQL 注入。ORM 是否绝对安全。参数化 vs 过滤 vs 转义的本质区别。"},
+    {"id": "a04-insecure-design", "name": "A04 不安全的设计", "count": 12,
+     "brief": "业务逻辑漏洞（支付金额篡改、优惠券复用、验证码逻辑缺陷、短信轰炸）、缺乏速率限制、威胁建模（STRIDE）、最小权限与默认安全设计原则、设计阶段 vs 编码阶段缺陷的区别、安全需求缺失的案例。"},
+    {"id": "a05-security-misconfiguration", "name": "A05 安全配置错误", "count": 14,
+     "brief": "调试接口暴露（debug 模式、Swagger/Actuator 未鉴权）、默认口令、目录列举、详细错误信息泄露（堆栈）、HTTP 安全响应头（CSP、X-Frame-Options、HSTS）各自作用、不必要的服务/功能开启、云存储桶配置错误、环境分离不当。"},
+    {"id": "a06-vulnerable-components", "name": "A06 易受攻击和过时的组件", "count": 12,
+     "brief": "组件漏洞成因与利用链（如反序列化 Gadgets 依赖）、如何发现用了有漏洞的组件（指纹、SBOM、依赖分析）、漏洞响应流程（通告-评估-升级）、临时缓解措施（WAF/配置）与根本修复、版本锁定风险、供应链攻击概览。"},
+    {"id": "a07-auth-failures", "name": "A07 身份认证与授权失败", "count": 13,
+     "brief": "会话固定、Session vs Token、Cookie 属性（HttpOnly/Secure/SameSite）与 CSRF 关系、JWT 的注销难题、密码正确存储策略（bcrypt/argon2）、暴力破解防护（限速/锁定/验证码的权衡）、OAuth2/OIDC 常见错误实现（state 缺失、redirect_uri 校验不严、code 拦截）、MFA 绕过场景。"},
+    {"id": "a08-integrity-failures", "name": "A08 软件和数据完整性故障", "count": 12,
+     "brief": "不安全的反序列化概览与危害、CI/CD 管道安全（构建投毒、凭据泄露）、依赖混淆、自动更新机制无签名校验、代码签名、npm/pip 恶意包、baseline：数据完整性在哪些环节必须校验。"},
+    {"id": "a09-logging-monitoring", "name": "A09 安全日志与监控失效", "count": 12,
+     "brief": "什么必须记日志（登录、鉴权失败、输入校验失败）、日志不能记什么（密码、敏感 PII）、日志注入、告警响应时效（OWASP 要求的渗透测试窗口 vs 平均检测时间）、与 SOC/SIEM 联动、日志保留与防篡改、如何设计可检测性。"},
+    {"id": "a10-ssrf", "name": "A10 SSRF", "count": 12,
+     "brief": "SSRF 危害面（内网探测、打云元数据 169.254.169.254、file 协议读文件、打内网脆弱服务）、常见出现场景（URL 预览、webhook、文件导入、PDF 渲染）、绕过手法（DNS rebinding、302 跳转、IP 编码、解析不一致）、防御为什么简单黑名单不够（出网白名单、禁用重定向跟随、协议限制）。"}
+  ]
+}

@@ -2,9 +2,9 @@
 
 本地可部署的面试刷题系统，仿 easthome CISP 章节刷题体验。基于开源项目 [EXAM-MASTER](https://github.com/CiE-XinYuChen/EXAM-MASTER)（MIT）二次改造，题库由 LLM 从本地面试知识库自动生成。
 
-- 题库：**4837 题**（单选 1891 / 多选 1036 / 判断 886 / 问答 1024），**549 个章节**，全部带答案解析
-- 来源：`~/workspace/40-knowledge/interview_prep/` 下 11 个库（duckpigdog 32 章、h4m5t 面经题库、goddemondemongod 30+ 公司真题、evilAdan0s 红队 128 题，以及 v2 新增：vvmdx 2023 届面经、Leezj9671 渗透面经、just0rg 面试题、Bypass007 应急响应笔记、tangxiaofeng7 面试 QA、we1h0 Web 安全面试、WindXaa 安卓逆向面试）
-- v2 新题经 LLM 逐题答案复核（correct 92% / 修正 35 / 淘汰确证错题 17），复核+审计脚本见 `gen/review.py`、`gen/apply_review.py`、`gen/finalize_v2.py`
+- 题库：**5314 题**（单选 2186 / 多选 1138 / 判断 899 / 问答 1091），**601 个章节**，全部带答案解析
+- 来源：`~/workspace/40-knowledge/interview_prep/` 下 11 个库（duckpigdog 32 章、h4m5t 面经题库、goddemondemongod 30+ 公司真题、evilAdan0s 红队 128 题，以及 v2 新增：vvmdx 2023 届面经、Leezj9671 渗透面经、just0rg 面试题、Bypass007 应急响应笔记、tangxiaofeng7 面试 QA、we1h0 Web 安全面试、WindXaa 安卓逆向面试）+ 6 个知识驱动专题系列（OWASP Top10、LLM 安全、组件中间件、Java 安全、云与容器、应急取证，`gen/series/` 大纲）
+- v2 新题与专题题均经 LLM 逐题答案复核（v2：correct 92% / 修正 35 / 淘汰确证错题 17；专题：correct 98% / 修正 5 / 淘汰 2），复核+审计脚本见 `gen/review.py`、`gen/apply_review.py`、`gen/finalize_v2.py`、`gen/merge_series.py`
 
 ## 快速开始（Docker，推荐）
 

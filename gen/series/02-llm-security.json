@@ -1,0 +1,28 @@
+{
+  "series_id": "llm-security",
+  "title": "LLM 安全攻防",
+  "chapter_prefix": "专题2-LLM安全攻防",
+  "description": "大模型应用安全攻防：提示词注入、越狱、RAG/Agent 攻击面、OWASP LLM Top 10、模型层攻击与防御体系、红队评测。",
+  "topics": [
+    {"id": "prompt-injection", "name": "提示词注入原理与直接注入", "count": 15,
+     "brief": "提示词注入与传统注入的异同（语义层漏洞 vs 语法层漏洞）、为什么系统提示词可被覆盖、指令优先级冲突、直接注入常见手法（角色扮演重置、翻译任务夹带、分隔符伪造、系统指令提取）、系统提示词算不算机密、防御为何不能只靠提示词层面。"},
+    {"id": "indirect-injection-rag", "name": "间接注入与 RAG 投毒", "count": 13,
+     "brief": "间接提示词注入（网页内容、邮件、PDF、代码注释中藏指令）、RAG 知识库投毒（文档内容变成攻击载荷）、检索内容进入上下文后的信任问题、数据与指令不分离的根本原因、可能的数据通道与控制通道分离思路、引用溯源与内容签名缓解。"},
+    {"id": "agent-tool-security", "name": "Agent 与工具调用安全", "count": 14,
+     "brief": "Function calling/MCP 的攻击面（工具描述注入、恶意 MCP server、工具返回结果注入）、混淆代理问题（confused deputy）、最小权限原则在 Agent 中的落地（只读 token、白名单动作、人工确认高危操作）、Agent 自主循环的风险（误删数据、越权操作）、多 Agent 间信任传递、审批与熔断机制。"},
+    {"id": "jailbreak", "name": "越狱手法与对抗演进", "count": 12,
+     "brief": "常见越狱范式（角色扮演、逐步诱导、编码/隐喻绕过、多轮上下文累积、低资源语言绕过、前缀注入、Many-shot）、为什么对齐会随模型版本变化、越狱与提示词注入的区别（破安全策略 vs 破应用业务约束）、对抗评测（自动化越狱、GCG）、红队视角的修复建议（安全微调、输入侧分类器）。"},
+    {"id": "owasp-llm-top10", "name": "OWASP LLM 应用 Top 10", "count": 12,
+     "brief": "OWASP Top 10 for LLM Applications（2023 版与 2025 版演进）：提示注入、敏感信息泄露、供应链、不安全输出处理、过度代理、系统提示泄露、向量和嵌入缺陷、资源耗尽（无限花费、模型 DoS）、错误信息处理。每类：定义、实际案例、防御要点。"},
+    {"id": "data-leakage-privacy", "name": "敏感信息泄露与数据安全", "count": 12,
+     "brief": "训练数据提取攻击与记忆化（memorization）、上下文窗口跨会话泄露、多租户共享缓存的风险、用户输入被用于训练的合规风险、PII 脱敏管道、企业接入 LLM 的数据防泄漏方案（私有化、网关脱敏、DLP）、系统提示词泄露的途径与影响评估。"},
+    {"id": "model-layer-attacks", "name": "模型层攻击：投毒、后门与窃取", "count": 13,
+     "brief": "训练数据投毒（触发器后门）、微调阶段安全、模型窃取/蒸馏（API 限时、查询行为指纹）、对抗样本（图像扰动使分类器误判、对 LLM 的等效攻击）、模型文件供应链风险（pickle 反序列化、HuggingFace 恶意模型）、模型水印与溯源、开源模型 vs 闭源 API 的安全权衡。"},
+    {"id": "insecure-output-handling", "name": "不安全输出处理与代码执行", "count": 12,
+     "brief": "LLM 输出直接拼进 SQL/HTML/Shell/eval 的危害链（本质是把模型输出当代码执行）、Markdown/图片链接外带数据（数据外泄信道）、代码解释器/沙箱逃逸风险（文件系统、网络访问）、输出 JSON 被下游解析的注入（prompt 中的引号逃逸）、防御：输出按不可信输入处理、沙箱化、结构化输出校验。"},
+    {"id": "defense-evaluation", "name": "LLM 安全防御体系与红队评测", "count": 13,
+     "brief": "纵深防御在 LLM 应用中的落点（输入过滤、系统提示加固、输出过滤、权限收敛、监控审计）、guardrail 框架的原理与局限（分类器误杀/漏杀、对抗适应）、结构化约束（受限解码、schema 约束）、权限沙箱（工具调用最小授权）、红队评测方法（攻击用例集、自动化评测流水线、回归测试）、上线后持续监控（异常 query 检测）。"},
+    {"id": "multimodal-misc", "name": "多模态与新兴攻击面", "count": 10,
+     "brief": "多模态注入（图片中的提示词、OCR 注入、音频隐藏指令）、语音助手链式攻击、浏览器自动化 Agent（computer use）的风险、AI 编程助手供应链风险（幻觉包名被利用、slopsquatting）、插件生态安全。"}
+  ]
+}
