@@ -2,9 +2,9 @@
 
 本地可部署的面试刷题系统，仿 easthome CISP 章节刷题体验。基于开源项目 [EXAM-MASTER](https://github.com/CiE-XinYuChen/EXAM-MASTER)（MIT）二次改造，题库由 LLM 从本地面试知识库自动生成。
 
-- 题库：**5314 题**（单选 2186 / 多选 1138 / 判断 899 / 问答 1091），**601 个章节**，全部带答案解析
-- 来源：`~/workspace/40-knowledge/interview_prep/` 下 11 个库（duckpigdog 32 章、h4m5t 面经题库、goddemondemongod 30+ 公司真题、evilAdan0s 红队 128 题，以及 v2 新增：vvmdx 2023 届面经、Leezj9671 渗透面经、just0rg 面试题、Bypass007 应急响应笔记、tangxiaofeng7 面试 QA、we1h0 Web 安全面试、WindXaa 安卓逆向面试）+ 6 个知识驱动专题系列（OWASP Top10、LLM 安全、组件中间件、Java 安全、云与容器、应急取证，`gen/series/` 大纲）
-- v2 新题与专题题均经 LLM 逐题答案复核（v2：correct 92% / 修正 35 / 淘汰确证错题 17；专题：correct 98% / 修正 5 / 淘汰 2），复核+审计脚本见 `gen/review.py`、`gen/apply_review.py`、`gen/finalize_v2.py`、`gen/merge_series.py`
+- 题库：**3400 题**（单选 1491 / 多选 717 / 判断 577 / 问答 615），**238 个章节**，全部带答案解析
+- 来源：现有本地面试知识库（duckpigdog、h4m5t、goddemondemongod、evilAdan0s 等）+ 6 个知识驱动专题系列（共 **479 道新增题**：OWASP Top 10、LLM 安全攻防、组件与中间件、Java 安全、云与容器、应急响应与溯源）。专题题目按「原理 → 利用条件 → 检测 → 防御 → 面试场景」设计，并经生成后自动审校、字段校验和跨库去重。
+- 题型分布：单选 1491、多选 717、判断 577、问答 615（v1 材料题 2921 + 专题 479）；专题原始生成 480 题，因 1 道题干超长淘汰，最终保留 479 题。
 
 ## 快速开始（Docker，推荐）
 
@@ -44,6 +44,8 @@ docker exec exam-master python tools/import_csv.py /tmp/q.csv
 
 模型配置在 `.env`（当前主用火山 glm-5.2，备用本地 Qwen3.8-27B，均 OpenAI 兼容协议）。
 
+### 原有材料驱动题库
+
 ```bash
 python3 gen/chunk.py            # 1. 切分 markdown → chunks.jsonl（424 块）
 python3 gen/test_client.py      # 2. 测试模型连通性
@@ -55,6 +57,26 @@ GEN_CONCURRENCY=8               # 并发数，默认 8
 ```
 
 题库源材料更新后，删掉 `data/questions/done.txt` 和 `data/questions/raw/` 即可全量重跑（约 200 万 token）。
+
+### 知识驱动专题系列（推荐扩展方式）
+
+专题大纲位于 `gen/series/`，目前包含 6 个系列、52 个细分专题：OWASP Top 10、LLM 安全攻防、组件与中间件漏洞、Java 安全、云与容器安全、应急响应与溯源。每个细分专题会经过「生成 → LLM 自审 → 结构校验 → 去重」流程。
+
+```bash
+# 试产单个专题
+cd gen && .venv/bin/python series_gen.py --topic owasp-top10/a03-injection
+
+# 生成指定系列（支持断点续跑）
+cd gen && .venv/bin/python series_gen.py --series llm-security
+
+# 校验全部专题 raw 结果
+cd gen && .venv/bin/python series_gen.py --validate-only
+
+# 与现有题库合并并导出 CSV
+cd gen && .venv/bin/python export_series.py --start-id 2943
+```
+
+`data/questions/output/series_questions.csv` 是增量导入文件；`questions.csv` 是包含现有题库和专题题库的全量文件。新增系列题目会自动按专题章节归类，便于在首页分章节练习。
 
 ## 目录结构
 
