@@ -11,3 +11,16 @@ data/questions/validated.jsonl
 data/questions/validate_report.json
 app/database.db
 app/server.log
+# v2 管线中间产物（最终题库为 validated_*_final/clean.jsonl 与 output/questions.csv）
+gen/.venv/
+data/questions/chunks_v2*.jsonl
+data/questions/done_v2_*.txt
+data/questions/raw_v2_*/
+data/questions/validated_v2.jsonl
+data/questions/validated_v2_reviewed.jsonl
+data/questions/validate_report_v2_*.json
+data/questions/merge_report_v2.json
+data/questions/apply_review_report.json
+data/questions/review_in_*.jsonl
+data/questions/review_out_*.jsonl
+data/questions/review_done_*.txt

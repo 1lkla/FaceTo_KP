@@ -2,15 +2,16 @@
 """解析 raw/*.json，容错提取 JSON，校验题目，全局去重，产出 validated.jsonl 和报告。"""
 import hashlib
 import json
+import os
 import re
 from collections import Counter
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data" / "questions"
-RAW_DIR = DATA_DIR / "raw"
-OUT_PATH = DATA_DIR / "validated.jsonl"
-REPORT_PATH = DATA_DIR / "validate_report.json"
+RAW_DIR = Path(os.environ.get("GEN_RAW", str(DATA_DIR / "raw")))
+OUT_PATH = Path(os.environ.get("GEN_OUT", str(DATA_DIR / "validated.jsonl")))
+REPORT_PATH = Path(os.environ.get("GEN_REPORT", str(DATA_DIR / "validate_report.json")))
 
 TYPES = {"单选题", "多选题", "判断题", "问答题"}
 DIFFICULTIES = {"简单", "中等", "困难"}

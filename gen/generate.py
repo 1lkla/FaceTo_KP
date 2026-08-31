@@ -8,15 +8,16 @@
 import argparse
 import asyncio
 import json
+import os
 import threading
 from pathlib import Path
 
 from glm_client import GLMClient, PROJECT_ROOT
 
 DATA_DIR = PROJECT_ROOT / "data" / "questions"
-CHUNKS_PATH = DATA_DIR / "chunks.jsonl"
-DONE_PATH = DATA_DIR / "done.txt"
-RAW_DIR = DATA_DIR / "raw"
+CHUNKS_PATH = Path(os.environ.get("GEN_CHUNKS", str(DATA_DIR / "chunks.jsonl")))
+DONE_PATH = Path(os.environ.get("GEN_DONE", str(DATA_DIR / "done.txt")))
+RAW_DIR = Path(os.environ.get("GEN_RAW", str(DATA_DIR / "raw")))
 
 # 无答案材料库：题目出自材料，答案由模型自身知识生成并标注
 NO_ANSWER_REPOS = {"evilAdan0s_RedTeamInterview"}
