@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FaceTo KP · 岗位定向刷题</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ 登录态布局：侧边导航（五屏流程） + 主视图 ============ -->
+<aside id="sidebar" class="sidebar hidden">
+  <div class="brand">
+    <div class="brand-logo">FK</div>
+    <div>
+      <div class="brand-name">FaceTo KP</div>
+      <div class="brand-sub">岗位定向刷题</div>
+    </div>
+  </div>
+
+  <!-- 五屏流程导航（对应前端画布 S1→S5） -->
+  <nav class="flow" id="flowNav">
+    <div class="flow-title">备考流程 · 五屏</div>
+    <a class="flow-item" data-step="1" href="#/import">
+      <span class="flow-dot">1</span><span class="flow-label">导入岗位 JD</span><span class="flow-tag">S1</span>
+    </a>
+    <a class="flow-item" data-step="2" href="#/jobs">
+      <span class="flow-dot">2</span><span class="flow-label">岗位画像</span><span class="flow-tag">S2</span>
+    </a>
+    <a class="flow-item" data-step="3" href="#/jobs">
+      <span class="flow-dot">3</span><span class="flow-label">备考计划 / 面经</span><span class="flow-tag">S3</span>
+    </a>
+    <a class="flow-item" data-step="4" href="#/jobs">
+      <span class="flow-dot">4</span><span class="flow-label">定向刷题</span><span class="flow-tag">S4</span>
+    </a>
+    <a class="flow-item" data-step="5" href="#/jobs">
+      <span class="flow-dot">5</span><span class="flow-label">模拟面试</span><span class="flow-tag">S5</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-foot">
+    <div class="user-chip" id="userChip"></div>
+    <button class="btn btn-ghost btn-block" id="logoutBtn">退出登录</button>
+  </div>
+</aside>
+
+<!-- ============ 主视图容器（切换动画挂载点） ============ -->
+<main id="main" class="main hidden">
+  <div id="view" class="view"></div>
+</main>
+
+<!-- ============ 未登录视图挂载点 ============ -->
+<div id="authRoot"></div>
+
+<div id="toasts" class="toasts"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

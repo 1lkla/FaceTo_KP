@@ -1,0 +1,27 @@
+# ---- Python ----
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+
+# ---- Node ----
+node_modules/
+
+# ---- 环境与密钥（§7.7 敏感配置不入库）----
+.env
+.env.*
+!.env.example
+
+# ---- 编辑器 / 系统 ----
+.DS_Store
+.workbuddy/
+.idea/
+.vscode/
+*.log
+*.sqlite3
+*.db
