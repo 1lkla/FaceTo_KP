@@ -35,3 +35,20 @@ data/questions/validated_v2_just0rg.jsonl
 data/questions/validated_v2_small.jsonl
 data/questions/validated_v2_vvmdx.jsonl
 data/questions/validated_v1_raw.bak.jsonl
+
+# ================= FaceTo KP · server（M1 MVP）=================
+server/.venv/
+server/**/__pycache__/
+# M1-dev 内存快照（含用户作答记录与掌握度，属运行时数据，不入库）
+server/data/
+*.py[cod]
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+
+# 编辑器 / 系统
+.DS_Store
+.workbuddy/
+.idea/
+.vscode/
+*.log

@@ -1,96 +1,97 @@
-# 网安面试刷题系统
+# FaceTo KP · 岗位定向刷题
 
-本地可部署的面试刷题系统，仿 easthome CISP 章节刷题体验。基于开源项目 [EXAM-MASTER](https://github.com/CiE-XinYuChen/EXAM-MASTER)（MIT）二次改造，题库由 LLM 从本地面试知识库自动生成。
+粘贴一份 JD → 生成岗位画像 → 定向刷题 → 模拟面试。
+把面经和真题对准你要投的那个岗位，而不是刷一份通用题库。
 
-- 题库：**3400 题**（单选 1491 / 多选 717 / 判断 577 / 问答 615），**238 个章节**，全部带答案解析
-- 来源：现有本地面试知识库（duckpigdog、h4m5t、goddemondemongod、evilAdan0s 等）+ 6 个知识驱动专题系列（共 **479 道新增题**：OWASP Top 10、LLM 安全攻防、组件与中间件、Java 安全、云与容器、应急响应与溯源）。专题题目按「原理 → 利用条件 → 检测 → 防御 → 面试场景」设计，并经生成后自动审校、字段校验和跨库去重。
-- 题型分布：单选 1491、多选 717、判断 577、问答 615（v1 材料题 2921 + 专题 479）；专题原始生成 480 题，因 1 道题干超长淘汰，最终保留 479 题。
+本仓库是 `docs/backend-web-design.md` 设计文档的 **M1 MVP 实现**（模块化单体），
+架构决策、容量规划、限流与降级矩阵、迭代触发器均记录在那份文档里。
 
-## 快速开始（Docker，推荐）
+---
 
-```bash
-docker compose up -d
-# 打开 http://localhost:32220 ，注册账号即可开始刷题
-```
-
-数据库持久化在 `./data/db/`，删容器不丢进度。
-
-## 功能
-
-- **章节练习**（首页）：章节卡片列表，显示每章总题数 / 已练 / 正确率 / 进度条，点进去从上次进度继续刷
-- **问答题**：面试口述题，作答后展示参考答案 + 解析，点「我答对了/我答错了」自评，计入错题本
-- 单选 / 多选 / 判断：即时判分 + 解析
-- 错题本、收藏、答题历史、统计分析、模拟考试、定时模式、关键词搜索
-
-## 本地运行（不用 Docker）
+## 快速开始（任意主机，克隆即可跑）
 
 ```bash
-cd app
-python3 -m venv venv && ./venv/bin/pip install -r requirements.txt
-./venv/bin/python app.py        # http://localhost:32220
+git clone https://github.com/1lkla/FaceTo_KP.git
+cd FaceTo_KP/server
+
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/uvicorn src.faceto.main:app --host 127.0.0.1 --port 8787
 ```
 
-## 导入题库
+浏览器打开 <http://127.0.0.1:8787>
 
-```bash
-# Docker
-docker cp data/questions/output/questions.csv exam-master:/tmp/q.csv
-docker exec exam-master python tools/import_csv.py /tmp/q.csv
-# 本地
-./app/venv/bin/python app/tools/import_csv.py data/questions/output/questions.csv
-```
+**演示账号**：`demo@faceto.cn` / `demo1234`
+（已预置一个解析完成的「安全工程师（Web方向）」岗位画像，登录即可体验 S2 → S5 全链路）
 
-## 重新生成题库（LLM 管线）
+> 依赖只有 `fastapi` + `uvicorn`，无数据库、无外部服务：
+> M1 阶段存储为进程内存（重启即失）、LLM 为规则引擎模拟，所有生产替换点已在代码与 `server/README.md` 中标注。
 
-模型配置在 `.env`（当前主用火山 glm-5.2，备用本地 Qwen3.8-27B，均 OpenAI 兼容协议）。
+---
 
-### 原有材料驱动题库
+## 五屏功能模块
 
-```bash
-python3 gen/chunk.py            # 1. 切分 markdown → chunks.jsonl（424 块）
-python3 gen/test_client.py      # 2. 测试模型连通性
-python3 gen/generate.py         # 3. 并发出题（断点续跑；--only <repo> --limit N 可试产）
-python3 gen/validate.py         # 4. 校验 + 去重
-python3 gen/remap_chapters.py   # 5. 章节名重映射
-python3 gen/to_csv.py           # 6. 导出 data/questions/output/questions.csv
-GEN_CONCURRENCY=8               # 并发数，默认 8
-```
+| 屏 | 功能 | 主要接口 | 业务域 |
+|---|---|---|---|
+| S1 | 导入岗位 JD（文本 / 链接 / 截图三入口，异步解析） | `POST /jobs` → 202 | job |
+| S2 | 岗位画像：考点雷达、权重微调、掌握度、弱项 | `GET/PUT /jobs/{id}/points`、`GET /profile/mastery` | job / profile |
+| S3 | 备考计划（按权重分日）+ 面经情报检索 | `POST /jobs/{id}/plans`、`GET /plans/{id}`、`GET /exp` | practice / exp |
+| S4 | 定向刷题：客观同步判分、主观 AI 异步点评、双溯源 | `GET /plans/{id}/next`、`POST /answers`、`GET /answers/{id}/review` | practice / question |
+| S5 | 模拟面试：SSE 流式追问 + 实时考点评估 + 报告回流 | `POST /interviews`、`GET /interviews/{id}/stream`、`POST /turns` | interview |
 
-题库源材料更新后，删掉 `data/questions/done.txt` 和 `data/questions/raw/` 即可全量重跑（约 200 万 token）。
+掌握度通过领域事件回流（`answer.graded` → profile 域），S2 雷达与 S5 报告共享同一份数据。
 
-### 知识驱动专题系列（推荐扩展方式）
+---
 
-专题大纲位于 `gen/series/`，目前包含 6 个系列、52 个细分专题：OWASP Top 10、LLM 安全攻防、组件与中间件漏洞、Java 安全、云与容器安全、应急响应与溯源。每个细分专题会经过「生成 → LLM 自审 → 结构校验 → 去重」流程。
-
-```bash
-# 试产单个专题
-cd gen && .venv/bin/python series_gen.py --topic owasp-top10/a03-injection
-
-# 生成指定系列（支持断点续跑）
-cd gen && .venv/bin/python series_gen.py --series llm-security
-
-# 校验全部专题 raw 结果
-cd gen && .venv/bin/python series_gen.py --validate-only
-
-# 与现有题库合并并导出 CSV
-cd gen && .venv/bin/python export_series.py --start-id 2943
-```
-
-`data/questions/output/series_questions.csv` 是增量导入文件；`questions.csv` 是包含现有题库和专题题库的全量文件。新增系列题目会自动按专题章节归类，便于在首页分章节练习。
-
-## 目录结构
+## 工程结构
 
 ```
-app/                  # 刷题系统（Flask + SQLite，EXAM-MASTER 二次改造）
-gen/                  # LLM 题库生成管线
-data/questions/       # 切块、原始响应、校验结果、最终 CSV
-data/db/              # Docker SQLite 数据卷
-Dockerfile / docker-compose.yml
-.env                  # 模型 API 配置（勿提交）
+docs/                        # 设计文档（架构 / 后端 Web 开发设计）
+server/
+├── src/faceto/
+│   ├── main.py              # 组装：include_router + 静态站点
+│   ├── core/                # 框架层（config / security / store / tasks）
+│   ├── domains/             # ★ 业务域 = 未来微服务边界
+│   │   ├── user/  job/  question/  practice/  exp/  interview/  profile/
+│   └── ai/                  # LLM 抽象层（Protocol + MockProvider）
+├── web/                     # 五屏前端（index.html / app.js / styles.css）
+└── requirements.txt
 ```
 
-## 说明
+域目录 = 未来的微服务边界：域之间只调 service 接口，跨域写走领域事件（生产切 Kafka），
+拆分服务是「搬目录」而不是「重写」。详见 `docs/backend-web-design.md` §3.3 依赖铁律。
 
-- 问答题在模拟考试/定时模式中不参与自动判分（无法机判口述题）
-- evilAdan0s 库（无答案）生成的题目，解析末尾标注「(答案由AI生成)」，请甄别
-- 原 EXAM-MASTER 自带 881 道示例题已移除（备份在 `app/questions.csv.bak`）
+---
+
+## API 契约要点
+
+- 前缀 `/api/v1/*`，从第一天起版本化；
+- 鉴权 `Authorization: Bearer <access_token>`（JWT，15min access + 30d refresh）；
+- 写接口支持 `Idempotency-Key`（作答提交必带，防双击与重试双写）；
+- AI 类接口 202 异步语义 + 统一任务状态 `GET /tasks/{id}` 轮询兜底，排队时间可见；
+- SSE：`event: token | point_eval | done | error`，心跳与关缓冲策略见文档 §4.3；
+- 错误体统一 `{"code": "...", "message": "..."}`，错误码按域前缀（`AUTH_` / `JOB_` / `PRC_`…）。
+
+---
+
+## 当前阶段的简化（生产替换点）
+
+| 项 | M1 实现 | 生产 |
+|---|---|---|
+| 存储 | 进程内存 | PostgreSQL 16（主从 + 分区表，已预留 `user_id` 分片键） |
+| 异步 | asyncio 后台协程 | Kafka + ai_worker / flush_worker 进程 |
+| LLM | 规则引擎（关键词抽取 / 模板点评 / 预设话术） | VolcanoGLM 主 + LocalQwen 备，令牌桶 + 熔断 |
+| 检索 | 内存关键词过滤 | Elasticsearch 8（ik 分词） |
+| 缓存 / 限流 | 内存计数器 | Redis 7 Cluster + 网关 APISIX |
+| SSO 会话 | 内存 | Redis（`session:{user_id}` / `sse:state:{session_id}`） |
+
+降级矩阵（`degrade.*` 开关）已在 `core/config.py` 落地：只砍 AI 与检索域，
+核心刷题链路（登录 → 题目 → 判分 → 进度）永不降级。
+
+---
+
+## 参考
+
+- `docs/backend-architecture.md` —— 六层架构、七服务拆分、扛压六决策
+- `docs/backend-web-design.md` —— 容量规划、工程结构、API 契约、数据模型、异步管线、降级预案
+- `server/README.md` —— 代码与设计的逐条映射表、运行说明
